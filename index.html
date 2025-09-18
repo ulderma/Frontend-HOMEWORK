@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danger!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            position: relative;
+        }
+        button {
+            position: absolute;
+            top: 60px;
+            padding: 25px 50px;
+            font-size: 36px;
+            color: white;
+            background: linear-gradient(145deg, #ff9a8b, #ff6f61);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.2), 
+                        -8px -8px 15px rgba(255, 255, 255, 0.5);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        button:hover {
+        transform: scale(1.05) translateY(-5px);
+        box-shadow: 
+        10px 10px 20px rgba(0, 0, 0, 0.3),
+        -10px -10px 20px rgba(255, 255, 255, 0.7),
+        0px 8px 12px rgba(0, 0, 0, 0.6); /* Усиленная тень */
+        }
+        .cat-container {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        .cat-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: rotate 3s linear infinite;
+        }
+       .overlay-image {
+        position: absolute;
+        object-fit: cover;
+        top: -80px; /* Смещаем вверх, чтобы она выступала за пределы круга */
+        left: -170px; /* Смещаем влево */
+        opacity: 0;
+        transition: opacity 1s ease;
+        transform: scale(0.6);
+        }
+        .overlay-visible {
+            opacity: 1;
+        }
+        .hidden {
+            display: none;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .button-left-top {
+            position: absolute;
+            top: 30%; /* Выше середины */
+            left: 20px;
+        }
+        .button-left-bottom {
+            position: absolute;
+            top: 70%; /* Ниже середины */
+            left: 20px;
+        }
+        .button-right-top {
+            position: absolute;
+            top: 30%; /* Выше середины */
+            right: 20px;
+        }
+        .button-right-bottom {
+            position: absolute;
+            top: 70%; /* Ниже середины */
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button id="toggleButton">Котик</button>
+    
+    <!-- Новые кнопки -->
+    <button class="button-left-top">Лево-Верх</button>
+    <button class="button-left-bottom">Лево-Низ</button>
+    <button class="button-right-top">Право-Верх</button>
+    <button class="button-right-bottom">Право-Низ</button>
+    <div id="circle" class="cat-container">
+        <img src="https://img.tsn.ua/cached/538/tsn-3d89b48abea265f94b95dc0c555f69d9/thumbs/1200x630/b8/b5/7a24775b9c0fb9b05ef09d16391db5b8.jpeg" alt="Кот" class="cat-image">
+        <img src="https://1news.az/images/2022/06/02/20220602011334630/thumb.jpg?2022-06-02+13%3A22%3A27" alt="Накладываемая картинка" class="overlay-image">
+    </div>
+    <script>
+        const circle = document.getElementById('circle');
+        const button = document.getElementById('toggleButton');
+        const catImage = document.querySelector('.cat-image');
+        const overlayImage = document.querySelector('.overlay-image');
+        let isPaused = false;
+
+        button.addEventListener('click', () => {
+            isPaused = !isPaused;
+            if (isPaused) {
+                button.textContent = 'Danger!';
+                button.style.backgroundColor = '#ff4444';
+                overlayImage.classList.add('overlay-visible');
+                setTimeout(() => {
+                    catImage.classList.add('hidden');
+                }, 500); // Удаляем круг после завершения анимации появления второй картинки
+            } else {
+                button.textContent = 'Котик';
+                button.style.backgroundColor = '';
+                overlayImage.classList.remove('overlay-visible');
+                catImage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
