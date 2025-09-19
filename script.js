@@ -1,28 +1,22 @@
-// Список цветов для переливания
-const colors = ['red', 'blue', 'green', 'purple', 'orange', 'pink', 'yellow'];
+const circle = document.getElementById('circle');
+const button = document.getElementById('toggleButton');
+const catImage = document.querySelector('.cat-image');
+const overlayImage = document.querySelector('.overlay-image');
+let isPaused = false;
 
-// Получаем элемент заголовка
-const title = document.getElementById('title');
-
-// Функция для смены цвета
-function changeColor() {
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    title.style.color = randomColor;
-}
-
-// Запускаем функцию каждые 500 мс (0.5 секунды)
-setInterval(changeColor, 500);
-// Получаем картинку
-const cat = document.getElementById('cat');
-
-// Функция для вращения
-function rotateCat() {
-    let angle = 0;
-    const interval = setInterval(() => {
-        angle += 1;
-        cat.style.transform = `rotate(${angle}deg)`;
-    }, 20); // Обновление каждые 20 мс → гладкая анимация
-}
-
-// Запускаем вращение
-rotateCat();
+button.addEventListener('click', () => {
+    isPaused = !isPaused;
+    if (isPaused) {
+        button.textContent = 'Danger!';
+        button.style.background = '#ff4444'; // Меняет цвет на красный
+        overlayImage.classList.add('overlay-visible'); // Показываем вторую картинку
+        setTimeout(() => {
+            catImage.classList.add('hidden'); // Скрываем первую картинку
+        }, 500); // Удаляем первую картинку после завершения анимации
+    } else {
+        button.textContent = 'Котик';
+        button.style.background = ''; // Возвращает исходный цвет (зелёный)
+        overlayImage.classList.remove('overlay-visible'); // Скрываем вторую картинку
+        catImage.classList.remove('hidden'); // Показываем первую картинку
+    }
+});

@@ -24,7 +24,7 @@
             padding: 25px 50px;
             font-size: 36px;
             color: white;
-            background: linear-gradient(145deg, #ff9a8b, #ff6f61);
+            background: linear-gradient(145deg, #4CAF50, #388E3C); /* Зелёный градиент */
             border: none;
             border-radius: 20px;
             cursor: pointer;
@@ -35,11 +35,11 @@
             text-transform: uppercase;
         }
         button:hover {
-        transform: scale(1.05) translateY(-5px);
-        box-shadow: 
-        10px 10px 20px rgba(0, 0, 0, 0.3),
-        -10px -10px 20px rgba(255, 255, 255, 0.7),
-        0px 8px 12px rgba(0, 0, 0, 0.6); /* Усиленная тень */
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 
+            10px 10px 20px rgba(0, 0, 0, 0.3),
+            -10px -10px 20px rgba(255, 255, 255, 0.7),
+            0px 8px 12px rgba(0, 0, 0, 0.6); /* Усиленная тень */
         }
         .cat-container {
             width: 400px;
@@ -57,14 +57,14 @@
             left: 0;
             animation: rotate 3s linear infinite;
         }
-       .overlay-image {
-        position: absolute;
-        object-fit: cover;
-        top: -80px; /* Смещаем вверх, чтобы она выступала за пределы круга */
-        left: -170px; /* Смещаем влево */
-        opacity: 0;
-        transition: opacity 1s ease;
-        transform: scale(0.6);
+        .overlay-image {
+            position: absolute;
+            object-fit: cover;
+            top: -80px; /* Смещаем вверх, чтобы она выступала за пределы круга */
+            left: -170px; /* Смещаем влево */
+            opacity: 0;
+            transition: opacity 1s ease;
+            transform: scale(0.6);
         }
         .overlay-visible {
             opacity: 1;
@@ -76,25 +76,47 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
+        /* Общие стили для боковых кнопок */
+       .button-left-top,
+       .button-left-bottom,
+       .button-right-top,
+       .button-right-bottom {
+        position: absolute;
+        background-color: #ca5811; /* Оранжевый фон */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        font-size: 20px; /* Уменьшаем размер шрифта */
+        white-space: normal; /* Разрешаем перенос текста */
+        text-align: center; /* Выравнивание текста по центру */
+        }
+        .button-left-top:hover,
+        .button-left-bottom:hover,
+        .button-right-top:hover,
+        .button-right-bottom:hover {
+            background-color: #b94311; /* Темнее при наведении */
+            transform: scale(1.1); /* Небольшое увеличение */
+        }
+        /* Позиционирование боковых кнопок */
         .button-left-top {
-            position: absolute;
             top: 30%; /* Выше середины */
-            left: 20px;
+            left: 80px;
         }
         .button-left-bottom {
-            position: absolute;
             top: 70%; /* Ниже середины */
-            left: 20px;
+            left: 80px;
         }
         .button-right-top {
-            position: absolute;
             top: 30%; /* Выше середины */
-            right: 20px;
+            right: 80px;
         }
         .button-right-bottom {
-            position: absolute;
             top: 70%; /* Ниже середины */
-            right: 20px;
+            right: 80px;
         }
     </style>
 </head>
@@ -102,10 +124,10 @@
     <button id="toggleButton">Котик</button>
     
     <!-- Новые кнопки -->
-    <button class="button-left-top">Лево-Верх</button>
-    <button class="button-left-bottom">Лево-Низ</button>
-    <button class="button-right-top">Право-Верх</button>
-    <button class="button-right-bottom">Право-Низ</button>
+    <button class="button-left-top">Болезнь кошачьих<br>царапин</button>
+    <button class="button-left-bottom">Лишай</button>
+    <button class="button-right-top">Токсоплазмоз</button>
+    <button class="button-right-bottom">Глисты</button>
     <div id="circle" class="cat-container">
         <img src="https://img.tsn.ua/cached/538/tsn-3d89b48abea265f94b95dc0c555f69d9/thumbs/1200x630/b8/b5/7a24775b9c0fb9b05ef09d16391db5b8.jpeg" alt="Кот" class="cat-image">
         <img src="https://1news.az/images/2022/06/02/20220602011334630/thumb.jpg?2022-06-02+13%3A22%3A27" alt="Накладываемая картинка" class="overlay-image">
@@ -121,16 +143,16 @@
             isPaused = !isPaused;
             if (isPaused) {
                 button.textContent = 'Danger!';
-                button.style.backgroundColor = '#ff4444';
-                overlayImage.classList.add('overlay-visible');
+                button.style.background = '#ff4444'; // Красный цвет
+                overlayImage.classList.add('overlay-visible'); // Показываем вторую картинку
                 setTimeout(() => {
-                    catImage.classList.add('hidden');
-                }, 500); // Удаляем круг после завершения анимации появления второй картинки
+                    catImage.classList.add('hidden'); // Скрываем первую картинку
+                }, 500); // Удаляем первую картинку после завершения анимации
             } else {
                 button.textContent = 'Котик';
-                button.style.backgroundColor = '';
-                overlayImage.classList.remove('overlay-visible');
-                catImage.classList.remove('hidden');
+                button.style.background = ''; // Возвращаем исходный цвет (зелёный)
+                overlayImage.classList.remove('overlay-visible'); // Скрываем вторую картинку
+                catImage.classList.remove('hidden'); // Показываем первую картинку
             }
         });
     </script>
