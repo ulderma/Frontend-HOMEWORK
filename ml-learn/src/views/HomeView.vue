@@ -1,51 +1,29 @@
-<template>
-  <main>
-    <h1>Давай начнём учить ML!</h1>
-
-    <div class="button-group">
-      <button @click="$router.push('/gradient-descent')" class="btn">Градиентный спуск</button>
-      <button @click="$router.push('/about')" class="btn">Обучение без учителя</button>
-      <button @click="$router.push('/')" class="btn">Классификация</button>
-      <button @click="$router.push('/')" class="btn">Обучение с учителем</button>
-    </div>
-  </main>
-</template>
-
-<script setup lang="ts">
-// Ничего не импортируем — все кнопки работают через $router
-</script>
-
 <style scoped>
-main {
+:global(html, body, #app) {
+  height: 100%;
+}
+
+:global(body) {
+  margin: 0;
+  background-image: url("/image.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* сам контейнер делаем прозрачным, чтобы фон был видно позади */
+.main-container {
+  min-height: 100vh;
+  width: 100%;
   text-align: center;
-  padding: 40px;
-}
-
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  color: #2c3e50;
-}
-
-.button-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center;
-}
-
-.btn {
-  padding: 12px 24px;
-  background: #ff5757;
+  font-size: 1.2rem;
   color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
 
-.btn:hover {
-  background: #e04a4a;
+  /* убери фон отсюда, чтобы не дублировать */
+  background: transparent;
+
+  /* чтобы контент не залезал под бегущую строку */
+  padding-top: 110px;
 }
-</style> 
+</style>
