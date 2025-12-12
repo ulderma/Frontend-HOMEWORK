@@ -1,6 +1,16 @@
 <template>
   <div class="main-container">
+    <!-- 🚀 БЕГУЩАЯ СТРОКА НА ВСЮ ШИРИНУ ЭКРАНА -->
+    <div class="marquee-full-width">
+      <div class="marquee-content">
+        <span class="marquee-text">
+          ML-learn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ML-learn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ML-learn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ML-learn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ML-learn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ML-learn
+        </span>
+      </div>
+    </div>
+
     <h1>Давай начнём учить ML!</h1>
+
     <input type="text" placeholder="Поиск..." />
     <div class="topics">
       <button
@@ -18,9 +28,20 @@
       <div class="modal-content">
         <div class="video-container">
           <iframe
+            v-if="currentVideo === 'gradient'"
             width="800"
             height="450"
-            src="https://www.youtube.com/embed/s-DriB7Kyq0"
+            src="https://www.youtube.com/embed/s-DriB7Kyq0?autoplay=1"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+
+          <iframe
+            v-if="currentVideo === 'unsupervised'"
+            width="800"
+            height="450"
+            src="https://www.youtube.com/embed/UdO8E1d57qc?autoplay=1"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen
@@ -28,14 +49,24 @@
 
           <div class="timeline">
             <h3>⏱ Тайминги:</h3>
-            <ul>
+            <ul v-if="currentVideo === 'gradient'">
               <li><a href="https://youtu.be/s-DriB7Kyq0?t=0" target="_blank">0:00 — Введение</a></li>
               <li><a href="https://youtu.be/s-DriB7Kyq0?t=90" target="_blank">1:30 — Что такое градиент?</a></li>
               <li><a href="https://youtu.be/s-DriB7Kyq0?t=195" target="_blank">3:15 — Как работает спуск</a></li>
               <li><a href="https://youtu.be/s-DriB7Kyq0?t=405" target="_blank">6:45 — Пример с функцией</a></li>
               <li><a href="https://youtu.be/s-DriB7Kyq0?t=620" target="_blank">10:20 — Заключение</a></li>
             </ul>
-            <p><small>💡 Клик по таймингу откроет видео в новой вкладке</small></p>
+
+            <ul v-if="currentVideo === 'unsupervised'">
+              <li><a href="https://youtu.be/UdO8E1d57qc?t=0" target="_blank">00:00 — Вступление</a></li>
+              <li><a href="https://youtu.be/UdO8E1d57qc?t=468" target="_blank">07:48 — Функция активации</a></li>
+              <li><a href="https://youtu.be/UdO8E1d57qc?t=907" target="_blank">15:07 — softargmax</a></li>
+              <li><a href="https://youtu.be/UdO8E1d57qc?t=1161" target="_blank">19:21 — softmax</a></li>
+              <li><a href="https://youtu.be/UdO8E1d57qc?t=1705" target="_blank">28:25 — momentum</a></li>
+              <li><a href="https://youtu.be/UdO8E1d57qc?t=2441" target="_blank">40:41 — Adam</a></li>
+              <li><a href="https://youtu.be/UdO8E1d57qc?t=3003" target="_blank">50:03 — Языковые нюансы</a></li>
+            </ul>
+            <p><small>💡 Клик по таймингу откроет видео с этого места</small></p>
           </div>
         </div>
         <button @click="hideModal" class="close-btn">← Назад</button>
@@ -48,6 +79,7 @@
 import { ref } from 'vue'
 
 const showModal = ref(false)
+const currentVideo = ref<string>('')
 
 interface Topic {
   id: number;
@@ -55,20 +87,26 @@ interface Topic {
 }
 
 const topics: Topic[] = [
-  { id: 1, name: 'Градиентный спуск' },
-  { id: 2, name: 'Обучение без учителя' },
-  { id: 3, name: 'Классификация' },
-  { id: 4, name: 'Обучение с учителем' },
+  { id: 1, name: 'Лекция 1' },
+  { id: 2, name: 'Лекция 2' },
+  { id: 3, name: 'Лекция 3' },
+  { id: 4, name: 'Лекция 4' },
 ]
 
 const showVideo = (id: number) => {
   if (id === 1) {
+    currentVideo.value = 'gradient'
+    showModal.value = true
+  } else if (id === 2) {
+    currentVideo.value = 'unsupervised'
     showModal.value = true
   }
+  // можно расширить для id === 3, 4…
 }
 
 const hideModal = () => {
   showModal.value = false
+  currentVideo.value = ''
 }
 </script>
 
@@ -119,6 +157,43 @@ input {
   transform: scale(1.05);
 }
 
+/* 🚀 БЕГУЩАЯ СТРОКА */
+.marquee-full-width {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #90CAF9; /* ← светлее на 2 тона: Light Blue 200 */
+  color: white;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 24px 0;
+  font-weight: bold;
+  font-size: 1.3rem;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* ещё легче тень */
+}
+
+.marquee-content {
+  display: inline-block;
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-text {
+  display: inline-block;
+  padding-right: 100%;
+  letter-spacing: 0.5px; /* чуть шире буквы */
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 /* Модальное окно */
 .modal-overlay {
   position: fixed;
@@ -126,7 +201,7 @@ input {
   left: 0;
   width: 100%;
   height: 100%;
-  background: transparent; /* Прозрачный фон */
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -135,9 +210,9 @@ input {
 
 .modal-content {
   background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   max-width: 960px;
   width: 95%;
   text-align: center;
@@ -153,24 +228,24 @@ input {
 }
 
 .video-container iframe {
-  border: 8px solid white; /* Белая рамка */
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Лёгкая тень */
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  max-width: 100%;
 }
 
 .timeline {
-  background: #f9f9f9;
-  padding: 16px;
-  border-radius: 10px;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
   width: 280px;
   text-align: left;
-  border: 1px solid #eee;
+  border: 1px solid #e9ecef;
 }
 
 .timeline h3 {
   margin-top: 0;
-  color: #e74c3c;
-  font-size: 1.1rem;
+  color: #1976d2;
+  font-size: 1.2rem;
 }
 
 .timeline ul {
@@ -180,32 +255,34 @@ input {
 }
 
 .timeline li {
-  margin: 8px 0;
+  margin: 10px 0;
+  font-size: 0.95rem;
 }
 
 .timeline a {
-  color: #2980b9;
+  color: #1565c0;
   text-decoration: none;
-  font-size: 0.95rem;
+  transition: color 0.2s;
 }
 
 .timeline a:hover {
   text-decoration: underline;
+  color: #0d47a1;
 }
 
 .close-btn {
-  margin-top: 20px;
-  padding: 10px 24px;
-  background: #e74c3c;
+  margin-top: 24px;
+  padding: 12px 32px;
+  background: #1976d2;
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.3s;
 }
 
 .close-btn:hover {
-  background: #c0392b;
+  background: #0d47a1;
 }
 </style>
