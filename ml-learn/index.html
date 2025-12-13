@@ -1,13 +1,38 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="ru">
   <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ML Learn — обучение машинному обучению</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ML Learn</title>
+
+    <style>
+      html,
+      body,
+      #app {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+
+        /* фон сайта */
+        background: url("/image.png") center / cover no-repeat fixed !important;
+      }
+
+      /* если где-то в стилях #app получает белый фон — убираем */
+      #app {
+        min-height: 100vh;
+        background: transparent !important;
+      }
+    </style>
   </head>
+
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
+

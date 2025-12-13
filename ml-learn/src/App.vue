@@ -1,7 +1,5 @@
 <template>
-  <div id="app">
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
 <script setup lang="ts">
@@ -17,4 +15,4 @@
   color: #2c3e50;
   margin-top: 60px;
 }
-</style>   
+</style>

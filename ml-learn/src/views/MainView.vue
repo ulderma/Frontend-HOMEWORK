@@ -50,7 +50,7 @@
     <div v-if="showModal" class="modal-overlay" @click.self="hideModal">
       <div class="modal-content">
         <div class="video-container">
-          <!-- ВМЕСТО iframe: контейнер под YouTube Player API -->
+          <!-- контейнер под YouTube Player API -->
           <div class="yt-box">
             <div ref="playerEl" class="yt-player"></div>
           </div>
@@ -184,7 +184,6 @@ const hideModal = () => {
 }
 
 /* ----------------- YOUTUBE IFRAME API ----------------- */
-/* global types */
 declare global {
   interface Window {
     YT?: any
@@ -199,13 +198,11 @@ let pendingSeek: number | null = null
 
 const loadYouTubeApi = () => {
   if (window.YT && window.YT.Player) return Promise.resolve()
-
   if (apiPromise) return apiPromise
 
   apiPromise = new Promise<void>((resolve) => {
     const existing = document.querySelector<HTMLScriptElement>('script[data-yt-iframe-api="1"]')
     if (existing) {
-      // если скрипт уже есть — ждём готовности
       if (window.YT && window.YT.Player) resolve()
       else {
         const prev = window.onYouTubeIframeAPIReady
@@ -236,10 +233,8 @@ const loadYouTubeApi = () => {
 const createOrLoad = async (videoId: string) => {
   await loadYouTubeApi()
   await nextTick()
-
   if (!playerEl.value) return
 
-  // если плеер уже создан — просто переключаем видео
   if (player && player.loadVideoById) {
     player.loadVideoById({ videoId, startSeconds: 0 })
     return
@@ -258,7 +253,6 @@ const createOrLoad = async (videoId: string) => {
     },
     events: {
       onReady: () => {
-        // если кликнули тайминг пока плеер грузился
         if (pendingSeek !== null) {
           player.seekTo(pendingSeek, true)
           pendingSeek = null
@@ -284,19 +278,17 @@ const seekTo = (sec: number) => {
   pendingSeek = sec
 }
 
-/* следим за открытием модалки и сменой лекции */
 watch(
   [showModal, currentKey],
   async ([isOpen, key]) => {
     if (!isOpen) return
     if (!key) return
-    const v = videos[key]
-    await createOrLoad(v.embedId)
+    await createOrLoad(videos[key].embedId)
   },
   { immediate: false }
 )
 
-/* ----------------- SEARCH (оставляю твой текущий, можешь менять отдельно) ----------------- */
+/* ----------------- SEARCH: ТОЛЬКО ПОЛНОЕ СОВПАДЕНИЕ ----------------- */
 const normalize = (s: string) =>
   s
     .toLowerCase()
@@ -314,9 +306,12 @@ const extractRightPart = (label: string) => {
 const buildTermsForVideo = (v: VideoConfig) => {
   const terms = new Set<string>()
   terms.add(normalize(v.title))
+
   for (const t of v.timings) {
     const phrase = normalize(extractRightPart(t.label))
     if (phrase) terms.add(phrase)
+
+    // отдельные слова (НО потом будет точное совпадение)
     for (const w of phrase.split(' ')) {
       if (w.length >= 2) terms.add(w)
     }
@@ -335,22 +330,26 @@ const findVideoByQuery = (q: string): ('lec1' | 'lec2' | 'lec3' | 'lec4') | null
   const order: Array<'lec1' | 'lec2' | 'lec3' | 'lec4'> = ['lec1', 'lec2', 'lec3', 'lec4']
   for (const key of order) {
     const terms = searchIndex[key]
-    if (terms.some((term) => term.includes(q))) return key
+    // ВАЖНО: только точное совпадение, без includes()
+    if (terms.some((term) => term === q)) return key
   }
   return null
 }
 
 const handleSearch = () => {
   const q = normalize(searchQuery.value)
+
   if (!q) {
     if (openedBySearch.value) hideModal()
     return
   }
+
   const match = findVideoByQuery(q)
   if (!match) {
     if (openedBySearch.value) hideModal()
     return
   }
+
   openedBySearch.value = true
   currentKey.value = match
   showModal.value = true
@@ -612,6 +611,7 @@ input {
   background: #0d47a1;
 }
 </style>
+
 
 
 
